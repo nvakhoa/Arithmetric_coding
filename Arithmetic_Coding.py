@@ -216,22 +216,15 @@ class Arithmetric_coding(object):
             start += d_start * width
             width *= d_width
 
-        # zip_code = 
-        # (N - 1) // f2 + 1
+
         data = []
-        t = str(hex(start.numerator))
-        print(t)
         data.append([hex(start.numerator), hex(start.denominator)])
-        #text_encoding = '{:.9999f}'.format(Decimal(start.numerator)/Decimal(start.denominator))
-        # new_dict = '
+
         for key, val in self.counts.items():
             data.append([key, val])
             
-            # new_dict += '{} {} {} {} {} '.format(key, val[0].numerator, val[0].denominator,
-            #                                     val[1].numerator, val[1].denominator)
-        #text_encoding += '\n' + new_dict
+
         data = np.array(data)
-        # np.save(self.path, data)
         
         text_encoding = ''
         for i in data:
@@ -462,14 +455,9 @@ f = open(path, 'r')
 text = f.read()
 
 encode = Arithmetric_coding(
-    path_compression=path_compression, pathdir=path, mod='encode', text=text)
-#a, b = encode.encoding()
-#decode = Arithmetric_coding(mod='decode')
-#text_decoding = decode.decoding(path_compression)
+    path_compression=path_compression, pathdir=path, mod='encode')
+encode.encoding()
+decode = Arithmetric_coding(mod='decode')
+text_decoding = decode.decoding(path_compression)
 
-#print(text_decoding)
-
-
-
-
-
+print(text_decoding)
