@@ -18,8 +18,11 @@ r1 = 'https://www.theunterminatedstring.com/python-bits-and-bytes/'
 r2 = 'https://github.com/nayuki/Reference-arithmetic-coding'
 r3 = 'wiki'
 r4 = 'https://www.youtube.com/watch?v=7vfqhoJVwuc'
+r5 = 'https://github.com/gw-c/arith'
 
-# cmd:    python D:\source\PythonProject\Image\compression\Arithmetic_Coding.py 1 encode C:\Users\USER\Desktop\testing\1.txt C:\Users\USER\Desktop\testing\encode
+# cmd: Arithmetic_Coding.py [version] [mode] [file1] [file(s)2]
+# cmd:    python D:\source\PythonProject\Image\compression\Arithmetic_Coding.py 3 encode C:\Users\USER\Desktop\testing\1.txt C:\Users\USER\Desktop\testing\encode
+
 
 class Prime():
 
@@ -34,7 +37,7 @@ class Prime():
 
     def _arrayPrime(self):
         number = self.number
-        if number == None: 
+        if number == None:
             print("number is None to AddPrime")
             return []
 
@@ -75,7 +78,6 @@ class Prime():
             val_b -= min_val
             val_a -= min_val
 
-
             a.primes[key] = val_a
 
             b.primes[key] = val_b
@@ -89,14 +91,14 @@ class Prime():
         return result
 
     def _upgrade(self, b):
-        for key,val in b.primes.items():
+        for key, val in b.primes.items():
             self.primes[key] = self.primes.get(key, 0) + val
 
     def mul(self, b):
         """
         eg: 2^3 * 2^6 = 2^9
         """
-        
+
         mul = copy(self)
         for key, val in b.items():
             mul.primes[key] = self.primes.get(key, 0) + val
@@ -108,20 +110,21 @@ class Prime():
     def _toInt(self):
         buff = 1
         for key, val in self.items():
-            buff *= pow(key,val)
+            buff *= pow(key, val)
         return buff
+
 
 class Fraction_prime():
     def __init__(self, a, b):
         self.numer = a
         self.deno = b
-    
+
     def mulFractPrime(self, FractionPrime):
         result = copy(self)
         result.numer = self.numer.mul(FractionPrime.numer)
         result.denor = self.deno.mul(FractionPrime.deno)
         return result
-            
+
     def addFractPrime(self, FractionPrime):
         result = copy(self)
         result.numer = self.numer.add(FractionPrime.numer)
@@ -130,6 +133,7 @@ class Fraction_prime():
 
     def toInt(self):
         return (self.numer._toInt(), self.deno._toInt())
+
 
 class Arithmetric_coding_image(object):
 
@@ -144,13 +148,12 @@ class Arithmetric_coding_image(object):
             self.counts[code] += 1
         self.probs = self.__build_probs__()
 
-    
     def imge2String(self):
         if self.image.shape[2] != 3:
             print('image shape 2 != 3')
 
         img = np.array(self.image)
-        img = img.reshape(1,1,-1)
+        img = img.reshape(1, 1, -1)
         self.codes = img[0][0][:]
 
     def __build_probs__(self):
@@ -162,7 +165,7 @@ class Arithmetric_coding_image(object):
             cumulative_count += self.counts[char]
 
         return probs
-        # for i in  img[0][0]: 
+        # for i in  img[0][0]:
         #     self.codes += '{} '.format(i)
 
     def encoding(self):
@@ -188,8 +191,9 @@ class Arithmetric_coding_image(object):
         print('done!')
         return start, start + width
 
+
 class Arithmetric_coding(object):
-   
+
     def __init__(self, path_compression=None, pathdir=None, mod='encode'):
         self.path = path_compression
         self.pathDir = pathdir
@@ -235,7 +239,7 @@ class Arithmetric_coding(object):
                 cumulative_count += self.counts[char]
 
         return probs
-        
+
     def encoding(self):
         name1 = '.txt'
         start = Fraction(0, 1)
@@ -400,7 +404,8 @@ class Arithmetric_coding_2(Arithmetric_coding):
 
         return ''.join([chr(code.numerator) for code in output_codes])
 
-class Arithmetric_coding_3(Arithmetric_coding): 
+
+class Arithmetric_coding_3(Arithmetric_coding):
 
     def encoding(self):
 
@@ -478,8 +483,10 @@ class Arithmetric_coding_3(Arithmetric_coding):
             f.write(text_encoding)
 
         self.Bstart = Fraction2Bits(self.start, self.width)
-        self.size_compression = os.path.getsize(self.path + name1) + os.path.getsize(self.path + name2)
+        self.size_compression = os.path.getsize(
+            self.path + name1) + os.path.getsize(self.path + name2)
         writeBytes(self.path + name2, self.Bstart)
+
 
 def image_decoding(file, shape):
     print('decoding...', end='')
@@ -520,21 +527,22 @@ def check(start, end, Bstart, Bend):
     if Bstart >= start and Bend < end:
         return True
 
+
 def Fraction2Bits(start, width):
     bits = ''
     bitstart = ''
     bitsend = ''
     end = start + width
 
-    Bstart = Fraction(0,1)
-    Bwidth = Fraction(1,2)
-    Bend = Fraction(1,1)
-    mid = Fraction(1,2)
+    Bstart = Fraction(0, 1)
+    Bwidth = Fraction(1, 2)
+    Bend = Fraction(1, 1)
+    mid = Fraction(1, 2)
 
     while not check(start, end, Bstart, Bend):
 
         if mid > start:
-            if mid > end: 
+            if mid > end:
                 bits += '0'
                 mid -= Bwidth*Fraction(1, 2)
             else:
@@ -556,6 +564,7 @@ def Fraction2Bits(start, width):
 
     return bitstart
 
+
 def writeBytes(pathFile, bits):
     bits = bits
     with open(pathFile, "wb") as f:
@@ -570,22 +579,24 @@ def readBytes(pathFile):
 
         chars = f.read()
         # for i in range(0,len(chars),8):
-        interger = int.from_bytes(chars,'little')
+        interger = int.from_bytes(chars, 'little')
         bits += '{0:08b}'.format(interger)[::-1]
     return bits
+
 
 def Bits2Fraction(bits):
     result = 0
     for i in range(len(bits)):
         if bits[i] == '1':
-            result += Fraction(1,2**(i+1))
+            result += Fraction(1, 2**(i+1))
     return result
+
 
 def compare(arr1, arr2):
     len1 = len(arr1)
     len2 = len(arr2)
-    lenght = len1 if len1 < len2  else len2
-    
+    lenght = len1 if len1 < len2 else len2
+
     # for i in range(lenght):
     if arr1[:lenght] != arr2[:lenght]:
         # # print('arr1 :',arr1[i-1:i+20])
@@ -596,7 +607,7 @@ def compare(arr1, arr2):
 
 def main():
     sys.argv = sys.argv[1:]
-    
+
     assert len(sys.argv) == 4, '{} != 4'.format(len(sys.argv))
     version = sys.argv[0]
     mode = sys.argv[1]
@@ -609,7 +620,7 @@ def main():
         ArthCode = Arithmetric_coding_2
     elif version == '3':
         ArthCode = Arithmetric_coding_3
-    else: 
+    else:
         print("version {} is not in my versions".format(version))
 
     path_file = sys.argv[2]
@@ -624,7 +635,8 @@ def main():
         print('done!! {0:8.2f} s'.format(time() - tic))
         size_root = os.path.getsize(path_file)
         size_compression = encode.size_compression
-        print('size file: {} b, size compress: {} b,  file/compress:{:8.2f}'.format(size_root, size_compression, size_root/size_compression))
+        print('size file: {} b, size compress: {} b,  file/compress:{:8.2f}'.format(
+            size_root, size_compression, size_root/size_compression))
 
     elif mode == 'decode':
 
@@ -637,11 +649,10 @@ def main():
         print('done!! {0:8.2f} s'.format(time() - tic))
 
         path_file = path_file[:-4] + '_decompress.txt'
-        
-        with open(path_file,'w+') as f:
+
+        with open(path_file, 'w+') as f:
             f.write(text_decoding)
         print('Saved data decompression in {}'.format(path_file))
-            
 
 
 if __name__ == "__main__":
